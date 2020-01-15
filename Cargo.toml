@@ -1,0 +1,13 @@
+[package]
+name = "dht22-to-redis"
+version = "0.1.0"
+authors = ["Bernd Vogt <bernd.vogt@sourcepit.org>"]
+edition = "2018"
+
+[dependencies]
+common_failures = "0.1.1"
+failure = "0.1.6"
+libc = "0.2.66"
+thread-priority = "0.1.1"
+caps = "0.3.4"
+redis = "0.14.0"
