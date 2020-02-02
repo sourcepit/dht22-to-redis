@@ -22,7 +22,6 @@ use clap::App;
 use clap::Arg;
 use dht22::Dht22;
 use dht22::DhtResult;
-use redis::Commands;
 use std::thread;
 use std::time::Duration;
 use thread_priority::set_thread_priority;
@@ -124,8 +123,14 @@ fn run() -> Result<()> {
                     "Temperature {}°C, Humidity {}%",
                     data.temperature, data.humidity
                 );
-                redis.publish(format!("{}/temperature", name), data.temperature)?;
-                redis.publish(format!("{}/humidity", name), data.humidity)?;
+                redis::cmd("XADD")
+                    .arg(&name)
+                    .arg("*")
+                    .arg("temperature")
+                    .arg(data.temperature)
+                    .arg("humidity")
+                    .arg(data.humidity)
+                    .query(&mut redis)?;
             }
             DhtResult::Timeout => debug!("Timeout"),
             DhtResult::ChecksumError => debug!("ChecksumError"),
