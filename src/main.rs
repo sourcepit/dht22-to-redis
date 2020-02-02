@@ -38,25 +38,7 @@ const ARG_GPIO_PIN: &str = "gpio-pin";
 const ARG_VERBOSITY: &str = "verbosity";
 const ARG_QUIET: &str = "quiet";
 
-fn try_upgrade_thread_priority() -> Result<()> {
-    let has_cap_sys_nice = match caps::has_cap(None, CapSet::Permitted, Capability::CAP_SYS_NICE) {
-        Ok(v) => v,
-        Err(e) => return Err(format_err!("{}", e)),
-    };
-    if has_cap_sys_nice {
-        let thread_id = thread_native_id();
-        let res = set_thread_priority(
-            thread_id,
-            ThreadPriority::Max,
-            ThreadSchedulePolicy::Realtime(RealtimeThreadSchedulePolicy::Fifo),
-        );
-        match res {
-            Ok(_) => {}
-            Err(e) => return Err(format_err!("{:?}", e)),
-        }
-    };
-    Ok(())
-}
+quick_main!(run);
 
 fn run() -> Result<()> {
     let args = App::new(crate_name!())
@@ -152,4 +134,22 @@ fn run() -> Result<()> {
     }
 }
 
-quick_main!(run);
+fn try_upgrade_thread_priority() -> Result<()> {
+    let has_cap_sys_nice = match caps::has_cap(None, CapSet::Permitted, Capability::CAP_SYS_NICE) {
+        Ok(v) => v,
+        Err(e) => return Err(format_err!("{}", e)),
+    };
+    if has_cap_sys_nice {
+        let thread_id = thread_native_id();
+        let res = set_thread_priority(
+            thread_id,
+            ThreadPriority::Max,
+            ThreadSchedulePolicy::Realtime(RealtimeThreadSchedulePolicy::Fifo),
+        );
+        match res {
+            Ok(_) => {}
+            Err(e) => return Err(format_err!("{:?}", e)),
+        }
+    };
+    Ok(())
+}
