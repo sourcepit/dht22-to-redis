@@ -2,6 +2,7 @@ use common_failures::prelude::*;
 
 use libc::mmap;
 use libc::munmap;
+use libc::off_t;
 use libc::MAP_SHARED;
 use libc::PROT_READ;
 use libc::PROT_WRITE;
@@ -11,7 +12,7 @@ use std::ptr;
 use std::slice;
 
 const GPIO_LENGTH: usize = 4096;
-const GPIO_OFFSET: i32 = 0x200000;
+const GPIO_OFFSET: off_t = 0x200000;
 
 #[derive(PartialEq)]
 pub enum PinDirection {
