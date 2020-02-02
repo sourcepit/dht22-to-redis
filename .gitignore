@@ -2,3 +2,10 @@
 **/*.rs.bk
 /.vscode
 Cargo.lock
+/.settings/
+/.env-armv7l.sh
+/.env-x86_64.sh
+/.project
+/cargo-build.sh
+/cargo-test.sh
+/cargo-verify.sh
