@@ -5,6 +5,9 @@ authors = ["Bernd Vogt <bernd.vogt@sourcepit.org>"]
 
 [profile.release]
 debug = ${cargo.profile.release.debug}
+# dht22.rs relates on an empty loop that consumes some nanoseconds of time..
+# otherwise we only run in timeouts when trying to read the gpio inputs
+opt-level = 0
 
 [dependencies]
 clap = ${cargo.clap.version}
